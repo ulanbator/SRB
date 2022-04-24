@@ -3,6 +3,7 @@ package com.example.srb.core.controller.admin;
 
 import com.example.srb.core.pojo.entity.IntegralGrade;
 import com.example.srb.core.service.IntegralGradeService;
+import com.srb.common.result.R;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,15 +26,50 @@ public class AdminIntegralGradeController {
     private IntegralGradeService integralGradeService;
 
     @GetMapping("/list")
-    public List<IntegralGrade> listAll(){
+    public R listAll(){
         List<IntegralGrade> integralGradeList = integralGradeService.list();
-        integralGradeList.forEach(System.out::println);
-        return integralGradeList;
+        return R.ok().data("list", integralGradeList).message("获取列表成功");
+
     }
 
     @DeleteMapping("/remove/{id}")
-    public boolean removeById(@PathVariable int id){
-        return integralGradeService.removeById(id);
+    public R removeById(@PathVariable int id){
+        boolean flag = integralGradeService.removeById(id);
+        if(flag == true){
+            return R.ok().message("删除成功");
+        }else{
+            return R.error().message("删除失败");
+        }
+    }
+
+    @PostMapping("/save")
+    public R save(@RequestBody IntegralGrade integralGrade){
+       boolean flag = integralGradeService.save(integralGrade);
+        if(flag == true){
+            return R.ok().data("data",integralGrade).message("添加成功");
+        }else{
+            return R.error().message("添加失败");
+        }
+    }
+
+    @GetMapping("/get/{id}")
+    public R getById(@PathVariable long id){
+        IntegralGrade integralGrade =  integralGradeService.getById(id);
+        if(integralGrade != null){
+            return R.ok().data("data",integralGrade).message("查询成功");
+        }else{
+            return R.error().message("查询失败");
+        }
+    }
+
+    @PutMapping("/update")
+    public R updateById(@RequestBody IntegralGrade integralGrade){
+        boolean flag = integralGradeService.updateById(integralGrade);
+        if(flag == true){
+            return R.ok().data("data", integralGrade).message("修改成功");
+        }else{
+            return R.error().message("修改失败");
+        }
     }
 }
 
