@@ -1,6 +1,7 @@
 package com.example.srb.core.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.swagger.annotations.ApiModel;
@@ -47,7 +48,7 @@ public class IntegralGrade implements Serializable {
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "逻辑删除(1:已删除，0:未删除)")
-    // @TableField("is_deleted")
+    @TableField("is_deleted")
     @TableLogic
     private Boolean deleted;
 

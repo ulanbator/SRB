@@ -1,9 +1,11 @@
 package com.example.srb.core.controller.admin;
 
 
+import com.example.srb.common.exception.Assert;
+import com.example.srb.common.result.R;
+import com.example.srb.common.result.ResponseEnum;
 import com.example.srb.core.pojo.entity.IntegralGrade;
 import com.example.srb.core.service.IntegralGradeService;
-import com.example.srb.common.result.R;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,7 +37,7 @@ public class AdminIntegralGradeController {
     @DeleteMapping("/remove/{id}")
     public R removeById(@PathVariable int id){
         boolean flag = integralGradeService.removeById(id);
-        if(flag == true){
+        if(flag){
             return R.ok().message("删除成功");
         }else{
             return R.error().message("删除失败");
@@ -45,7 +47,8 @@ public class AdminIntegralGradeController {
     @PostMapping("/save")
     public R save(@RequestBody IntegralGrade integralGrade){
        boolean flag = integralGradeService.save(integralGrade);
-        if(flag == true){
+        Assert.notNull(integralGrade.getBorrowAmount(), ResponseEnum.BORROW_AMOUNT_NULL_ERROR);
+        if(flag){
             return R.ok().data("data",integralGrade).message("添加成功");
         }else{
             return R.error().message("添加失败");
@@ -65,7 +68,7 @@ public class AdminIntegralGradeController {
     @PutMapping("/update")
     public R updateById(@RequestBody IntegralGrade integralGrade){
         boolean flag = integralGradeService.updateById(integralGrade);
-        if(flag == true){
+        if(flag){
             return R.ok().data("data", integralGrade).message("修改成功");
         }else{
             return R.error().message("修改失败");
