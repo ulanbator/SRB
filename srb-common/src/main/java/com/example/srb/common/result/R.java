@@ -1,4 +1,4 @@
-package com.srb.common.result;
+package com.example.srb.common.result;
 
 import lombok.Data;
 

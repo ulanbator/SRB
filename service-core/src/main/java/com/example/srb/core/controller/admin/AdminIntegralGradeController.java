@@ -3,7 +3,7 @@ package com.example.srb.core.controller.admin;
 
 import com.example.srb.core.pojo.entity.IntegralGrade;
 import com.example.srb.core.service.IntegralGradeService;
-import com.srb.common.result.R;
+import com.example.srb.common.result.R;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
