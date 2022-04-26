@@ -32,15 +32,36 @@
         </encoder>
     </appender>
 
-    <!--<logger name="com.example" level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-    </logger>-->
+    <!-- 滚动日志文件配置-->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!--  要区别于其他的appender中的文件名字  -->
+        <file>${log.path}/log-rolling.log</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>${ENCODING}</charset>
+        </encoder>
+
+
+        <!-- 设置滚动日志记录的滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志归档路径以及格式 -->
+            <fileNamePattern>${log.path}/info/log-rolling-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--归档日志文件保留的最大数量-->
+            <maxHistory>15</maxHistory>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
 
     <!-- 开发环境和测试环境-->
     <springProfile name="dev,test">
         <logger name="com.example" level="INFO">
             <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ROLLING_FILE"/>
         </logger>
     </springProfile>
 

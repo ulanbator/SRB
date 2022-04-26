@@ -19,6 +19,7 @@ import java.util.List;
  * @author fangzheng
  * @since 2022-04-20
  */
+
 @CrossOrigin
 @RestController
 @RequestMapping("/admin/core/integralGrade")
