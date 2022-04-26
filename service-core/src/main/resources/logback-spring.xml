@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <contextName>SRB</contextName>
+
+    <!-- 日志的输出目录 -->
+    <property name="log.path"  value="D:/log/srb_log/core"/>
+
+    <!-- 控制台日志输出格式 -->
+    <property name="CONSOLE_LOG_PATTERN" value="%yellow(%date{yyyy-MM-dd HH:mm:ss}) %highlight([%-5level]) %green(%logger) %msg%n"/>
+
+    <!-- 文件日志输出格式 -->
+    <property name="FILE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} [%-5level] %thread %file:%line %logger %msg%n"/>
+
+    <!-- 日志编码 -->
+    <property name="ENCODING" value="UTF-8"/>
+
+    <!-- 控制台日志配置-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>${ENCODING}</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件日志配置-->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${log.path}/log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>${ENCODING}</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.example" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+</configuration>

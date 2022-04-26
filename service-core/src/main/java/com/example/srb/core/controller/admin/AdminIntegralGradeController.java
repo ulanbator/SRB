@@ -31,7 +31,6 @@ public class AdminIntegralGradeController {
     public R listAll(){
         List<IntegralGrade> integralGradeList = integralGradeService.list();
         return R.ok().data("list", integralGradeList).message("获取列表成功");
-
     }
 
     @DeleteMapping("/remove/{id}")
