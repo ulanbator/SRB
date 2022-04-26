@@ -32,8 +32,24 @@
         </encoder>
     </appender>
 
-    <logger name="com.example" level="INFO">
+    <!--<logger name="com.example" level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
-    </logger>
+    </logger>-->
+
+    <!-- 开发环境和测试环境-->
+    <springProfile name="dev,test">
+        <logger name="com.example" level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
+
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <logger name="com.example" level="ERROR">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </logger>
+    </springProfile>
+
 </configuration>
