@@ -2,8 +2,10 @@ package com.example.srb.core.service;
 
 import com.example.srb.core.pojo.entity.Dict;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.srb.core.pojo.entity.dto.ExcelDictDTO;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +18,6 @@ import java.io.InputStream;
 public interface DictService extends IService<Dict> {
 
     public void importData(InputStream inputStream);
+
+    public List<ExcelDictDTO> listDictData();
 }
