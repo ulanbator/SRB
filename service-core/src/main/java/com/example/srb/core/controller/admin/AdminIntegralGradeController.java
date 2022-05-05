@@ -47,12 +47,12 @@ public class AdminIntegralGradeController {
     @PostMapping("/save")
     public R save(@RequestBody IntegralGrade integralGrade){
        boolean flag = integralGradeService.save(integralGrade);
-        Assert.notNull(integralGrade.getBorrowAmount(), ResponseEnum.BORROW_AMOUNT_NULL_ERROR);
-        if(flag){
-            return R.ok().data("data",integralGrade).message("添加成功");
-        }else{
-            return R.error().message("添加失败");
-        }
+       Assert.notNull(integralGrade.getBorrowAmount(), ResponseEnum.BORROW_AMOUNT_NULL_ERROR);
+       if(flag){
+           return R.ok().data("data",integralGrade).message("添加成功");
+       }else{
+           return R.error().message("添加失败");
+       }
     }
 
     @GetMapping("/get/{id}")

@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.example.srb.common.exception.BusinessException;
 import com.example.srb.common.result.R;
 import com.example.srb.common.result.ResponseEnum;
+import com.example.srb.core.pojo.entity.Dict;
 import com.example.srb.core.pojo.entity.dto.ExcelDictDTO;
 import com.example.srb.core.service.DictService;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * @author fangzheng
@@ -49,6 +51,16 @@ public class AdminDictController {
                     .doWrite(dictService.listDictData());
         } catch (IOException e) {
             throw new BusinessException(ResponseEnum.EXPORT_DATA_ERROR, e);
+        }
+    }
+
+    @GetMapping("/listByParentId/{id}")
+    public R listByParentId(@PathVariable("id") long id){
+        List<Dict> list = dictService.listByParentId(id);
+        if(list != null){
+            return R.ok().message("查询成功").data("data", list);
+        }else{
+            return R.error().message("查询失败");
         }
     }
 }
