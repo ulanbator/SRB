@@ -8,7 +8,11 @@ import com.example.srb.core.mapper.DictMapper;
 import com.example.srb.core.pojo.entity.Dict;
 import com.example.srb.core.pojo.entity.dto.ExcelDictDTO;
 import com.example.srb.core.service.DictService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,7 @@ import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -26,11 +31,15 @@ import java.util.List;
  * @since 2022-04-20
  */
 @Service
+@Slf4j
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
 
     @Resource
     private DictMapper dictMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Transactional(rollbackFor = {Exception.class})
     @Override
@@ -57,12 +66,33 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     @Override
     public List<Dict> listByParentId(Long parentId) {
-        QueryWrapper<Dict> wrapper = new QueryWrapper<>();
-        wrapper.eq("parent_id", parentId);
-        List<Dict> dicts = dictMapper.selectList(wrapper);
-        dicts.forEach(dict -> {
-           dict.setHasChildren(hasChildren(dict.getId()));
-        });
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Dict> dicts = new ArrayList<>();
+        Object jsonRes = redisTemplate.opsForValue().get(String.valueOf(parentId));
+        if(jsonRes != null){
+            try {
+                dicts = objectMapper.readValue(String.valueOf(jsonRes), new TypeReference<List<Dict>>() {
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            log.info("redis中查询！");
+        }else{
+            QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+            wrapper.eq("parent_id", parentId);
+            dicts = dictMapper.selectList(wrapper);
+            dicts.forEach(dict -> {
+                dict.setHasChildren(hasChildren(dict.getId()));
+            });
+            try{
+                Object dictJson = objectMapper.writeValueAsString(dicts);
+                redisTemplate.opsForValue().set(String.valueOf(parentId), dictJson, 5, TimeUnit.MINUTES);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            log.info("数据库中查询！");
+
+        }
         return dicts;
     }
 
